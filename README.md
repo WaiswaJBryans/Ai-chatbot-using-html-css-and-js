@@ -23,7 +23,7 @@ A simple, modern AI chatbot web application built with vanilla HTML, CSS, and Ja
 ```bash
 git clone https://github.com/WaiswaJBryans/Ai-chatbot-using-html-css-and-js.git
 cd Ai-chatbot-using-html-css-and-js
-
+```
 # 2. Add your operRouter api key
 - open your js file and add api key.
 
