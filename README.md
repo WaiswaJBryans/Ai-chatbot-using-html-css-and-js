@@ -2,6 +2,8 @@
 
 A simple, modern AI chatbot web application built with vanilla HTML, CSS, and JavaScript. This app features a clean chat interface and integrates with the [OpenRouter API](https://openrouter.ai/) to deliver AI-powered responses. Messages are displayed in a conversational format with smooth scrolling, rounded corners, and responsive design.
 
+## Preview link
+[AI chatbot](https://bryanschatbot.vercel.app)
 ## Features
 
 - Clean, responsive chat UI.
