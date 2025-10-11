@@ -1,21 +1,17 @@
-    // ========== CONFIGURATION ==========
- //OpenRouter API key 
+//OpenRouter API key 
     const OPENROUTER_API_KEY = "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";
-    // Model 'openai/gpt-4'
+    // Model 'openai/gpt-4.1'
     const OPENROUTER_MODEL = "openai/gpt-4.1";
     
-    // ========== DOM ELEMENTS ==========
+    //Accessing dom elements
     const chatBox = document.getElementById('chat-box');
     const chatForm = document.getElementById('chat-form');
     const userInput = document.getElementById('user-input');
     
-    // ========== MESSAGE STATE ==========
     // Store the conversation as an array of {role, content}
     let conversation = [
       { role: "system", content: "You are a helpful AI chatbot." }
     ];
-    
-    // ========== FUNCTIONS ==========
     
     // Adding a message to the chat UI
     function addMessageToChat(role, content) {
@@ -38,7 +34,7 @@
       addMessageToChat('bot', '...');
     }
     
-    // Replacing the last bot message (the loader) with the actual response
+    // Replacing the last bot message with the actual response
     function replaceLastBotMessage(content) {
       const messages = chatBox.querySelectorAll('.message.bot');
       if (messages.length > 0) {
@@ -46,7 +42,7 @@
       }
     }
     
-    // ========== OPENROUTER API CALL ==========
+    //OPENROUTER API CALL
     // Getting a response from OpenRouter API
     async function getBotReply() {
       try {
@@ -85,7 +81,7 @@
       }
     }
     
-    // ========== EVENT HANDLER ==========
+    // adding event listener
     chatForm.addEventListener('submit', async function(e) {
       e.preventDefault();
       const text = userInput.value.trim();
@@ -104,7 +100,7 @@
       await getBotReply();
     });
     
-    // ========== OPTIONAL: ENTER KEY HANDLING ==========
+    // handling ENTER key
     userInput.addEventListener('keydown', function(e) {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
@@ -112,11 +108,9 @@
       }
     });
     
-    // ========== INITIAL GREETING ==========
-    const initGreetingMsg ="Hello! 👋 How can I help you today?";
+    // initillising message
+    const initGreetingMsg = "Hello! How can I help you today?";
     window.addEventListener('DOMContentLoaded', () => {
       addMessageToChat('bot',initGreetingMsg );
       conversation.push({ role: "assistant", content: initGreetingMsg });
     });
-    
-  
