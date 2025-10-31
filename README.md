@@ -1,6 +1,6 @@
 # AI Chatbot Web App
 
-A simple, modern AI chatbot web application built with vanilla HTML, CSS, and JavaScript. This app features a clean chat interface and integrates with the [OpenRouter API](https://openrouter.ai/) to deliver AI-powered responses. Messages are displayed in a conversational format with smooth scrolling, rounded corners, and responsive design.
+A simple, modern AI chatbot web application built with vanilla HTML, CSS, and JavaScript. This app features a clean chat interface and integrates with the Google gemini-2.0-flash to deliver AI-powered responses. Messages are displayed in a conversational format with smooth scrolling, rounded corners, and responsive design.
 
 ## Preview link
 [AI chatbot](https://bryanschatbot.vercel.app)
@@ -9,14 +9,12 @@ A simple, modern AI chatbot web application built with vanilla HTML, CSS, and Ja
 - Clean, responsive chat UI.
 - Scrollable chat box.
 - User messages on the right (blue), bot messages on the left (green).
-- AI responses via OpenRouter API.
+- AI responses via gemini-2.0-flash API.
 - Smooth scrolling for new messages.
 - Modern CSS styling: rounded corners, shadow, mobile-friendly.
 - Well-commented JavaScript for easy understanding and customization.
 
-## Demo
 
-![Chatbot Screenshot](screenshot.png) <!-- Add your screenshot here if available -->
 
 ## Getting Started
 
@@ -26,11 +24,11 @@ A simple, modern AI chatbot web application built with vanilla HTML, CSS, and Ja
 git clone https://github.com/WaiswaJBryans/Ai-chatbot-using-html-css-and-js.git
 cd Ai-chatbot-using-html-css-and-js
 ```
-# 2. Add your operRouter api key
+# 2. Add your gemini ai api key
 - open your js file and add api key.
 
 ```bash
-const OPENROUTER_API_KEY = "YOUR_OPENROUTER_API_KEY_HERE";
+const GEMINI_API_KEY = "YOUR API KEYHERE";
 ```
 # 3. Running the app
 
@@ -53,7 +51,6 @@ no built tool or server required.
 ## Customization
 
 - Change colors and layouts in the CSS section.
-- Swap the AI model by modifying the `OPENROUTER_MODEL` variable.
 - Add more features (message history, avatars, etc.) by extending the JS code.
 
 ## Security
@@ -65,15 +62,6 @@ For production, use a backend server to securely store and proxy API requests.
 ## License
 
 MIT License
-
----
-
-## Acknowledgments
-
-- [OpenRouter](https://openrouter.ai/)
-- [DeepSeek](https://deepseek.com/) (optional model)
-- [OpenAI](https://openai.com/) (optional model)
-```
 
 ---
  
