@@ -39,7 +39,7 @@ function replaceLastBotMessage(content) {
   }
 }
 
-// ========== GEMINI API CALL ==========
+
 async function getBotReply() {
   try {
     // Prepare messages for Gemini API
