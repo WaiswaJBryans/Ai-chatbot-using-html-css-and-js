@@ -1,116 +1,115 @@
-//OpenRouter API key 
-    const OPENROUTER_API_KEY = "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";
-    // Model 'openai/gpt-4.1'
-    const OPENROUTER_MODEL = "openai/gpt-4.1";
+
+const GEMINI_API_KEY = "AIzaSyAulptahRC1aNwl9JRUkJ9CR_BgfilgaWA";
+const GEMINI_MODEL = "gemini-2.0-flash";
+
+// Chat UI Elements
+const chatBox = document.getElementById('chat-box');
+const chatForm = document.getElementById('chat-form');
+const userInput = document.getElementById('user-input');
+
+// Store conversation as array of {role, content}
+let conversation = [];
+
+
+// Add message to chat UI
+function addMessageToChat(role, content) {
+  const row = document.createElement('div');
+  row.className = 'message-row ' + (role === 'user' ? 'right' : 'left');
+  const msg = document.createElement('div');
+  msg.className = 'message ' + (role === 'user' ? 'user' : 'bot');
+  msg.textContent = content;
+  row.appendChild(msg);
+  chatBox.appendChild(row);
+  chatBox.scrollTo({
+    top: chatBox.scrollHeight,
+    behavior: "smooth"
+  });
+}
+
+// Show loading indicator
+function showBotThinking() {
+  addMessageToChat('bot', '...');
+}
+
+// Replace bot loader with reply
+function replaceLastBotMessage(content) {
+  const messages = chatBox.querySelectorAll('.message.bot');
+  if (messages.length > 0) {
+    messages[messages.length - 1].textContent = content;
+  }
+}
+
+// ========== GEMINI API CALL ==========
+async function getBotReply() {
+  try {
+    // Prepare messages for Gemini API
+    const history = conversation.map(m => ({
+      role: m.role === 'user' ? 'user' : 'model',
+      parts: [{ text: m.content }]
+    }));
+    // Only send last 10 messages for brevity
+    const payload = { contents: history.slice(-10) };
     
-    //Accessing dom elements
-    const chatBox = document.getElementById('chat-box');
-    const chatForm = document.getElementById('chat-form');
-    const userInput = document.getElementById('user-input');
-    
-    // Store the conversation as an array of {role, content}
-    let conversation = [
-      { role: "system", content: "You are a helpful AI chatbot." }
-    ];
-    
-    // Adding a message to the chat UI
-    function addMessageToChat(role, content) {
-      const row = document.createElement('div');
-      row.className = 'message-row ' + (role === 'user' ? 'right' : 'left');
-      const msg = document.createElement('div');
-      msg.className = 'message ' + (role === 'user' ? 'user' : 'bot');
-      msg.textContent = content;
-      row.appendChild(msg);
-      chatBox.appendChild(row);
-      // Scrolling smoothly to bottom
-      chatBox.scrollTo({
-        top: chatBox.scrollHeight,
-        behavior: "smooth"
-      });
-    }
-    
-    // Showing a loading indicator while waiting for bot response
-    function showBotThinking() {
-      addMessageToChat('bot', '...');
-    }
-    
-    // Replacing the last bot message with the actual response
-    function replaceLastBotMessage(content) {
-      const messages = chatBox.querySelectorAll('.message.bot');
-      if (messages.length > 0) {
-        messages[messages.length - 1].textContent = content;
+    // Call Gemini API
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
       }
+    );
+    
+    if (!response.ok) {
+      throw new Error("Error: " + response.status + " " + response.statusText);
+    }
+    const data = await response.json();
+    
+  
+    let reply = "Sorry, no response.";
+    if (
+      data &&
+      data.candidates &&
+      data.candidates[0] &&
+      data.candidates[0].content &&
+      data.candidates[0].content.parts &&
+      data.candidates[0].content.parts[0].text
+    ) {
+      reply = data.candidates[0].content.parts[0].text.trim();
     }
     
-    //OPENROUTER API CALL
-    // Getting a response from OpenRouter API
-    async function getBotReply() {
-      try {
-        // Preparing payload for OpenRouter
-        const payload = {
-          model: OPENROUTER_MODEL,
-          messages: conversation.filter(m => m.role !== "system"),
-          // Optionally include system message as needed
-        };
-        
-        // Making Call to OpenRouter API
-        const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Authorization": "Bearer " + OPENROUTER_API_KEY,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(payload)
-        });
-        
-        // Parsing response
-        if (!response.ok) {
-          throw new Error("Error: " + response.status + " " + response.statusText);
-        }
-        const data = await response.json();
-        
-        // Extract ai first response
-        const reply = data.choices[0].message.content.trim();
-        // Adding to conversation history
-        conversation.push({ role: "assistant", content: reply });
-        // Replacing loading indicator with actual reply
-        replaceLastBotMessage(reply);
-      } catch (err) {
-        // Showing error if API call fails
-        replaceLastBotMessage("Sorry, I couldn't reach the AI service. (" + err.message + ")");
-      }
-    }
-    
-    // adding event listener
-    chatForm.addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const text = userInput.value.trim();
-      if (!text) return;
-      
-      // Adding user message to UI and conversation history
-      addMessageToChat('user', text);
-      conversation.push({ role: "user", content: text });
-      
-      userInput.value = '';
-      userInput.focus();
-      
-      // Show bot thinking indicator
-      showBotThinking();
-      // Get bot response from API
-      await getBotReply();
-    });
-    
-    // handling ENTER key
-    userInput.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        chatForm.dispatchEvent(new Event('submit'));
-      }
-    });
-    
-    // initillising message
-    const initGreetingMsg = "Hello! How can I help you today?";
-    window.addEventListener('DOMContentLoaded', () => {
-      addMessageToChat('bot',initGreetingMsg );
-      conversation.push({ role: "assistant", content: initGreetingMsg });
-    });
+    conversation.push({ role: "model", content: reply });
+    replaceLastBotMessage(reply);
+  } catch (err) {
+    replaceLastBotMessage("Sorry, I couldn't reach Gemini service. (" + err.message + ")");
+  }
+}
+chatForm.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const text = userInput.value.trim();
+  if (!text) return;
+  
+  addMessageToChat('user', text);
+  conversation.push({ role: "user", content: text });
+  
+  userInput.value = '';
+  userInput.focus();
+  
+  showBotThinking();
+  await getBotReply();
+});
+
+// Optional: Enter key handling
+userInput.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    chatForm.dispatchEvent(new Event('submit'));
+  }
+});
+
+// Initial Greeting
+const initGreetingMsg = "Hello! How can I help you today?";
+window.addEventListener('DOMContentLoaded', () => {
+  addMessageToChat('bot', initGreetingMsg);
+  conversation.push({ role: "model", content: initGreetingMsg });
+});
