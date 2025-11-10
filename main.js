@@ -2,12 +2,11 @@ const sysprompt = "You are a highly professional AI assistant.Always respond wit
 const GEMINI_API_KEY = "AIzaSyAulptahRC1aNwl9JRUkJ9CR_BgfilgaWA";
 const GEMINI_MODEL = "gemini-2.0-flash";
 
-// Chat UI Elements
 const chatBox = document.getElementById('chat-box');
 const chatForm = document.getElementById('chat-form');
 const userInput = document.getElementById('user-input');
 
-// Store conversation as array of {role, content}
+
 let conversation = [
   {
     role: "user",
@@ -15,7 +14,7 @@ let conversation = [
   }
 ];
 
-// Add message to chat UI (now supports HTML formatting)
+
 function addMessageToChat(role, content) {
   const row = document.createElement('div');
   row.className = 'message-row ' + (role === 'user' ? 'right' : 'left');
@@ -30,20 +29,15 @@ function addMessageToChat(role, content) {
   });
 }
 
-// Show loading indicator
 function showBotThinking() {
   addMessageToChat('bot', '...');
 }
-
-// Replace bot loader with reply (supports HTML)
 function replaceLastBotMessage(content) {
   const messages = chatBox.querySelectorAll('.message.bot');
   if (messages.length > 0) {
     messages[messages.length - 1].innerHTML = content;
   }
 }
-
-// ========== GEMINI API CALL ==========
 async function getBotReply() {
   try {
     // Prepare messages for Gemini API
@@ -51,10 +45,10 @@ async function getBotReply() {
       role: m.role === 'user' ? 'user' : 'model',
       parts: [{ text: m.content }]
     }));
-    // Only send last 10 messages for brevity
+    
     const payload = { contents: history.slice(-10) };
 
-    // Call Gemini API
+    
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`,
       {
@@ -102,8 +96,6 @@ chatForm.addEventListener('submit', async function(e) {
   showBotThinking();
   await getBotReply();
 });
-
-// Optional: Enter key handling
 userInput.addEventListener('keydown', function(e) {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
@@ -111,8 +103,8 @@ userInput.addEventListener('keydown', function(e) {
   }
 });
 
-// Initial Greeting (as HTML)
-const initGreetingMsg = "Hello! am an Ai chatbot created by Waiswa J Bryans, How can I help you today?";
+
+const initGreetingMsg = "Hello! How can I help you today?";
 window.addEventListener('DOMContentLoaded', () => {
   addMessageToChat('bot', initGreetingMsg);
   conversation.push({ role: "model", content: initGreetingMsg });
