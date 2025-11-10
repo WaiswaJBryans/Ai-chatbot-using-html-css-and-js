@@ -104,7 +104,7 @@ userInput.addEventListener('keydown', function(e) {
 });
 
 
-const initGreetingMsg = "Hello! How can I help you today?";
+const initGreetingMsg = "Hello!am an AI chatbot created by Waiswa J Bryans, How can I help you today?";
 window.addEventListener('DOMContentLoaded', () => {
   addMessageToChat('bot', initGreetingMsg);
   conversation.push({ role: "model", content: initGreetingMsg });
