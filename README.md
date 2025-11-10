@@ -43,8 +43,8 @@ no built tool or server required.
  ## How it works
  
 1. User types a message and presses Send.
-2. The message appears on the right side (blue bubble).
-3. The app sends the message to OpenRouter via its API.
+2. The message appears on the right side.
+3. The app sends the message to Gemini via its API.
 4. The AI response appears on the left (green bubble).
 5. The chat box scrolls smoothly to always show the latest message.
 
