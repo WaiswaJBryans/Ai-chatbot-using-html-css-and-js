@@ -78,7 +78,7 @@ async function getBotReply() {
     conversation.push({ role: "model", content: reply });
     replaceLastBotMessage(reply);
   } catch (err) {
-    replaceLastBotMessage("Sorry, I couldn't reach Gemini service. (" + err.message + ")");
+    replaceLastBotMessage("Sorry, I couldn't reach ai service. (" + err.message + ")");
   }
 }
 
